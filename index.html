@@ -348,9 +348,10 @@
     background:#25D366;
     display:flex; align-items:center; justify-content:center;
     box-shadow:0 12px 30px rgba(37,211,102,.5);
-    transition:transform .2s ease;
+    transition:transform .2s ease, opacity .35s ease;
   }
   .float-wa:hover{transform:scale(1.08);}
+  .float-wa.hide{opacity:0; transform:scale(.8); pointer-events:none;}
   .float-wa svg{width:30px; height:30px; fill:#fff;}
 
   /* Reveal animation */
@@ -765,6 +766,13 @@
     });
   }, { threshold: 0.12 });
   revealEls.forEach(el => io.observe(el));
+
+  // Desvanecer el botón flotante de WhatsApp cuando llega al pie (para que se vea el crédito)
+  const floatWa = document.querySelector('.float-wa');
+  const footerBottom = document.querySelector('.footer-bottom');
+  new IntersectionObserver((entries) => {
+    floatWa.classList.toggle('hide', entries[0].isIntersecting);
+  }, { threshold: 0 }).observe(footerBottom);
 
   // Footer year
   document.getElementById('year').textContent = new Date().getFullYear();
